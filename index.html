@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Strength Analyzer &amp; Breach Checker</title>
+  <meta
+    name="description"
+    content="Client-side password strength analyzer with entropy estimation, weak-pattern detection, a privacy-preserving breach check (k-anonymity), a reuse checker and a secure password generator."
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="wrap">
+    <div class="eyebrow">
+      <span class="dot" aria-hidden="true"></span>
+      TASK 1 &nbsp;/&nbsp; PASSWORD SECURITY
+    </div>
+
+    <h1>Password Strength Analyzer</h1>
+
+    <p class="sub">
+      Checks password strength, detects weak patterns, calculates entropy,
+      checks known leaked passwords, and suggests stronger alternatives.
+      Everything runs locally in your browser &mdash; your password is
+      never sent anywhere in full.
+    </p>
+
+    <section class="card" aria-labelledby="analyzer-heading">
+      <h2 id="analyzer-heading" class="visually-hidden">Password analyzer</h2>
+
+      <label for="pw">Enter a password</label>
+
+      <div class="input-row">
+        <div class="field">
+          <input
+            type="password"
+            id="pw"
+            name="pw"
+            placeholder="Type here..."
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="analyzer-note"
+          >
+
+          <button
+            class="toggle"
+            id="toggleVis"
+            type="button"
+            aria-pressed="false"
+            aria-controls="pw"
+          >SHOW</button>
+        </div>
+      </div>
+
+      <div class="personal-grid">
+        <div>
+          <label for="nameInput">
+            Your name <span style="color: var(--brass);">(optional)</span>
+          </label>
+
+          <input
+            type="text"
+            id="nameInput"
+            name="nameInput"
+            placeholder="e.g. Rahul"
+            autocomplete="off"
+          >
+        </div>
+
+        <div>
+          <label for="dobInput">
+            Date of birth <span style="color: var(--brass);">(optional)</span>
+          </label>
+
+          <input type="date" id="dobInput" name="dobInput">
+        </div>
+      </div>
+
+      <p class="help" id="analyzer-note">
+        Name and DOB are used only to detect weak password patterns,
+        entirely on your device. They are not saved or sent anywhere.
+      </p>
+
+      <div class="dial-row">
+        <div class="dial" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle
+              class="dial-track"
+              cx="60"
+              cy="60"
+              r="50"
+            ></circle>
+
+            <circle
+              class="dial-fill"
+              id="dialFill"
+              cx="60"
+              cy="60"
+              r="50"
+              stroke="#212c4a"
+              stroke-dasharray="0 314"
+            ></circle>
+          </svg>
+
+          <div class="dial-label">
+            <div class="score" id="scoreNum">0</div>
+            <div class="max">/ 100</div>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <div
+            class="verdict-tag"
+            id="verdictTag"
+            style="color: var(--sub);"
+          >
+            Awaiting input
+          </div>
+
+          <div
+            class="verdict-desc"
+            id="verdictDesc"
+            role="status"
+            aria-live="polite"
+          >
+            Start typing to see how your password holds up.
+          </div>
+
+          <div class="entropy" id="entropyLine"></div>
+        </div>
+      </div>
+
+      <ul class="checks" id="checks">
+        <li class="fail" data-k="len">
+          <span class="ico" aria-hidden="true">✕</span>
+          12+ characters
+        </li>
+
+        <li class="fail" data-k="upper">
+          <span class="ico" aria-hidden="true">✕</span>
+          Uppercase letter
+        </li>
+
+        <li class="fail" data-k="lower">
+          <span class="ico" aria-hidden="true">✕</span>
+          Lowercase letter
+        </li>
+
+        <li class="fail" data-k="digit">
+          <span class="ico" aria-hidden="true">✕</span>
+          Number
+        </li>
+
+        <li class="fail" data-k="symbol">
+          <span class="ico" aria-hidden="true">✕</span>
+          Symbol
+        </li>
+
+        <li class="fail" data-k="sequence">
+          <span class="ico" aria-hidden="true">✕</span>
+          No weak sequence
+        </li>
+
+        <li class="fail" data-k="personal">
+          <span class="ico" aria-hidden="true">✕</span>
+          No name / DOB
+        </li>
+
+        <li class="fail" data-k="unique">
+          <span class="ico" aria-hidden="true">✕</span>
+          Not a common password
+        </li>
+      </ul>
+
+      <div class="security-box">
+        <div class="status-box">
+          <div class="status-title" id="entropyStatusLabel">Bonus 1 &middot; Entropy</div>
+
+          <div
+            class="status-value status-wait"
+            id="entropyStatus"
+            role="status"
+            aria-live="polite"
+            aria-labelledby="entropyStatusLabel"
+          >
+            Waiting for password...
+          </div>
+        </div>
+
+        <div class="status-box">
+          <div class="status-title" id="leakStatusLabel">Bonus 2 &middot; Leak Check</div>
+
+          <div
+            class="status-value status-wait"
+            id="leakStatus"
+            role="status"
+            aria-live="polite"
+            aria-labelledby="leakStatusLabel"
+          >
+            Waiting for password...
+          </div>
+        </div>
+      </div>
+
+      <div class="sugg">
+        <div class="sugg-head">
+          <span id="suggLabel">Suggested alternative</span>
+
+          <button class="gen-btn" id="genBtn" type="button" aria-describedby="suggLabel">
+            &#8635; GENERATE
+          </button>
+        </div>
+
+        <div class="sugg-box">
+          <span id="suggText" class="ph">
+            Click generate for a strong alternative
+          </span>
+
+          <button class="copy-btn" id="copyBtn" type="button">
+            COPY
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="reuse-heading">
+      <span class="opt">Optional</span>
+
+      <h2 id="reuse-heading">Reuse check</h2>
+
+      <p class="desc">
+        Passwords you "save" below are hashed with SHA-256
+        client-side. Nothing is stored in plaintext, saved to disk,
+        or sent to a server.
+      </p>
+
+      <div
+        class="reuse-flag"
+        id="reuseFlag"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <div class="add-row">
+        <label for="vaultInput" class="visually-hidden">
+          Old password to check against
+        </label>
+
+        <input
+          type="text"
+          id="vaultInput"
+          name="vaultInput"
+          placeholder="Add an old password to check against..."
+          autocomplete="off"
+        >
+
+        <button class="add-btn" id="addBtn" type="button">
+          + SAVE HASH
+        </button>
+      </div>
+
+      <ul class="vault-list" id="vaultList"></ul>
+    </section>
+
+    <footer class="foot">
+      Password analysis runs in your browser.
+      Leak checking uses privacy-preserving k-anonymity.
+      <br>
+      <b>Session memory only.</b>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

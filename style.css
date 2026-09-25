@@ -1,0 +1,645 @@
+/* =====================================================================
+   Password Strength Analyzer & Breach Checker — Stylesheet
+   Moved out of index.html as part of the HTML5/CSS3/JS refactor.
+   Visual design, colors, spacing and layout are unchanged from the
+   original single-file version.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Global styles
+   --------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #0d1321;
+  --panel: #141c30;
+  --panel-2: #1b2540;
+  --line: #2a3557;
+  --text: #e9edf6;
+  --sub: #8b96b8;
+  --brass: #c9a24b;
+  --weak: #e35d5d;
+  --fair: #e39a3f;
+  --good: #4fb37d;
+  --strong: #3fc7c7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Screen-reader-only text: keeps semantic headings/labels for
+   accessibility without changing the visible layout. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1100px 500px at 15% -10%, rgba(63, 199, 199, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(201, 162, 75, 0.06), transparent 55%),
+    var(--ink);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  padding: 36px 20px 60px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------------- */
+.wrap {
+  width: 100%;
+  max-width: 620px;
+}
+
+.card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 162, 75, 0.5),
+    transparent
+  );
+}
+
+.card h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+.card .opt {
+  color: var(--brass);
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.card .desc {
+  color: var(--sub);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 6px 0 18px;
+}
+
+/* ---------------------------------------------------------------------
+   Header
+   --------------------------------------------------------------------- */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--sub);
+  margin-bottom: 10px;
+}
+
+.eyebrow .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--strong);
+  box-shadow: 0 0 10px var(--strong);
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.sub {
+  color: var(--sub);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0 0 28px;
+}
+
+/* ---------------------------------------------------------------------
+   Password input
+   --------------------------------------------------------------------- */
+label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--sub);
+  margin-bottom: 10px;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.field {
+  position: relative;
+  flex: 1;
+}
+
+input[type="password"],
+input[type="text"],
+input[type="date"] {
+  width: 100%;
+  background: #0c1324;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 46px 14px 16px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .15s;
+}
+
+input[type="date"] {
+  padding-right: 16px;
+}
+
+input:focus {
+  border-color: var(--strong);
+}
+
+input:focus-visible {
+  outline: 2px solid var(--strong);
+  outline-offset: 2px;
+}
+
+.toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--sub);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.toggle:hover {
+  color: var(--text);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--strong);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.personal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.personal-grid label {
+  margin-bottom: 7px;
+}
+
+.help {
+  color: var(--sub);
+  font-size: 11px;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+/* ---------------------------------------------------------------------
+   Strength meter (score dial + verdict)
+   --------------------------------------------------------------------- */
+.dial-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.dial {
+  position: relative;
+  width: 118px;
+  height: 118px;
+  flex: none;
+}
+
+.dial svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.dial-track {
+  fill: none;
+  stroke: #212c4a;
+  stroke-width: 9;
+}
+
+.dial-fill {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dasharray .35s ease, stroke .35s ease;
+}
+
+.dial-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dial-label .score {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.dial-label .max {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--sub);
+}
+
+.verdict {
+  flex: 1;
+}
+
+.verdict-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  border: 1px solid currentColor;
+}
+
+.verdict-desc {
+  color: var(--sub);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------
+   Requirement checklist
+   --------------------------------------------------------------------- */
+.checks {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+
+.checks li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--sub);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.checks li .ico {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 1px solid var(--line);
+  color: var(--sub);
+}
+
+.checks li.pass {
+  color: var(--text);
+}
+
+.checks li.pass .ico {
+  background: var(--good);
+  border-color: var(--good);
+  color: #04160f;
+}
+
+.checks li.fail .ico {
+  color: var(--weak);
+  border-color: var(--weak);
+}
+
+/* ---------------------------------------------------------------------
+   Entropy
+   --------------------------------------------------------------------- */
+.entropy {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--sub);
+  margin-top: 8px;
+}
+
+.entropy b {
+  color: var(--text);
+}
+
+/* ---------------------------------------------------------------------
+   Bonus status boxes — Entropy summary & Breach/leak checker
+   --------------------------------------------------------------------- */
+.security-box {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.status-box {
+  padding: 13px;
+  background: #0c1324;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.status-title {
+  color: var(--sub);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 7px;
+}
+
+.status-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.status-good {
+  color: #b7e8cb;
+}
+
+.status-bad {
+  color: #f5b6b6;
+}
+
+.status-wait {
+  color: var(--sub);
+}
+
+/* ---------------------------------------------------------------------
+   Password generator ("Suggested alternative")
+   --------------------------------------------------------------------- */
+.sugg {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line);
+}
+
+.sugg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sugg-head span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--sub);
+}
+
+.gen-btn {
+  background: none;
+  border: 1px solid var(--brass);
+  color: var(--brass);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.gen-btn:hover {
+  background: var(--brass);
+  color: #1a1305;
+}
+
+.gen-btn:focus-visible,
+.add-btn:focus-visible,
+.copy-btn:focus-visible {
+  outline: 2px solid var(--strong);
+  outline-offset: 2px;
+}
+
+.sugg-box {
+  background: #0c1324;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 46px;
+}
+
+.sugg-box .ph {
+  color: var(--sub);
+  font-size: 13px;
+}
+
+/* ---------------------------------------------------------------------
+   Breach/leak checker (uses the status boxes above + notifications below)
+   --------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+   Buttons — generic small text buttons (copy, add)
+   --------------------------------------------------------------------- */
+.copy-btn {
+  background: none;
+  border: none;
+  color: var(--sub);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.copy-btn:hover {
+  color: var(--strong);
+}
+
+.add-btn {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 0 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-btn:hover {
+  border-color: var(--strong);
+  color: var(--strong);
+}
+
+/* ---------------------------------------------------------------------
+   Reuse checker (vault)
+   --------------------------------------------------------------------- */
+.vault-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 150px;
+  overflow: auto;
+}
+
+.vault-list li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--sub);
+  display: flex;
+  justify-content: space-between;
+  background: #0c1324;
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.vault-list li .h {
+  color: var(--text);
+  opacity: .55;
+}
+
+.add-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* ---------------------------------------------------------------------
+   Notifications (reuse-check flag / inline status messages)
+   --------------------------------------------------------------------- */
+.reuse-flag {
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  display: none;
+}
+
+.reuse-flag.show {
+  display: block;
+}
+
+.reuse-flag.bad {
+  background: rgba(227, 93, 93, 0.12);
+  border: 1px solid var(--weak);
+  color: #f5b6b6;
+}
+
+.reuse-flag.ok {
+  background: rgba(79, 179, 125, 0.12);
+  border: 1px solid var(--good);
+  color: #b7e8cb;
+}
+
+/* ---------------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------------- */
+.foot {
+  text-align: center;
+  color: var(--sub);
+  font-size: 11.5px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 26px;
+  line-height: 1.6;
+}
+
+.foot b {
+  color: var(--brass);
+}
+
+/* ---------------------------------------------------------------------
+   Responsive design
+   --------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  body {
+    padding: 25px 12px 40px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .dial-row {
+    gap: 16px;
+  }
+
+  .checks {
+    grid-template-columns: 1fr;
+  }
+
+  .personal-grid,
+  .security-box {
+    grid-template-columns: 1fr;
+  }
+
+  .add-row {
+    flex-direction: column;
+  }
+
+  .add-btn {
+    height: 44px;
+  }
+
+  h1 {
+    font-size: 27px;
+  }
+}
