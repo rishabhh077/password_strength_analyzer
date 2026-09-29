@@ -1,6 +1,6 @@
 # Password Strength Analyzer & Breach Checker
 
-A static, client-side web app that analyzes password strength in real
+A static, client-side web app that analyzes passd strength in real
 time, estimates entropy, flags weak/common patterns, checks a password
 against known data breaches (without ever sending it anywhere in full),
 checks for password reuse, and generates strong replacement passwords.
