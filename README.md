@@ -18,7 +18,7 @@ password_strength_analyzer/
 ├── index.html   # Markup only — links style.css and script.js
 ├── style.css    # All styling, organized into sections
 ├── script.js    # All application logic
-├── backup/      # Snapshot(s) of the original single-file version
+├── backup/      # Snapshot(s) of the original single-file veion
 └── README.md
 ```
 
